@@ -1,0 +1,33 @@
+/**
+ * @file mecanum_kinematics.h
+ * @brief Mecanum wheel inverse kinematics
+ */
+
+#ifndef MECANUM_KINEMATICS_H
+#define MECANUM_KINEMATICS_H
+
+/**
+ * @brief Wheel speeds for mecanum drive
+ */
+struct WheelSpeeds {
+    float frontLeft;
+    float frontRight;
+    float backLeft;
+    float backRight;
+};
+
+/**
+ * @brief Calculate wheel speeds from joystick input
+ * 
+ * @param vx Strafe velocity (-100 to +100)
+ * @param vy Forward velocity (-100 to +100)
+ * @param omega Rotation velocity (-100 to +100)
+ * @param speedMultiplier Speed multiplier (0.0 to 1.0)
+ * @param deadzone Joystick deadzone (values below this are treated as 0)
+ * @param output Output wheel speeds
+ */
+void mecanum_calculate(float vx, float vy, float omega, 
+                       float speedMultiplier, float deadzone,
+                       WheelSpeeds* output);
+
+#endif // MECANUM_KINEMATICS_H

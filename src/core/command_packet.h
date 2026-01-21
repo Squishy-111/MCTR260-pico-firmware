@@ -1,0 +1,69 @@
+/**
+ * @file command_packet.h
+ * @brief Control command structure matching ESP32 and Flutter app
+ */
+
+#ifndef COMMAND_PACKET_H
+#define COMMAND_PACKET_H
+
+#include <stdint.h>
+#include <cstring>
+
+// =============================================================================
+// COMMAND PACKET STRUCTURE
+// =============================================================================
+
+// Maximum number of auxiliary channels
+#define AUX_CHANNEL_COUNT       6
+
+// Maximum number of toggle switches
+#define TOGGLE_COUNT            6
+
+/**
+ * @brief Joystick input data
+ */
+typedef struct {
+    bool isJoystick;        // true = joystick, false = dial
+    float x;                // -100 to +100 for joystick
+    float y;                // -100 to +100 for joystick
+    float value;            // -100 to +100 for dial
+} joystick_input_t;
+
+/**
+ * @brief Complete control command from app
+ * 
+ * Matches the JSON structure sent by the Flutter app:
+ * {
+ *   "type": "control",
+ *   "vehicle": "mecanum",
+ *   "left": {"control": "joystick", "x": 0.0, "y": 50.0},
+ *   "right": {"control": "dial", "value": 0.0},
+ *   "speed": 80,
+ *   "aux": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+ *   "toggles": [false, false, false, false, false, false]
+ * }
+ */
+typedef struct {
+    char type[16];              // "control", "heartbeat", etc.
+    char vehicle[16];           // "mecanum", "differential", etc.
+    joystick_input_t left;      // Left control input
+    joystick_input_t right;     // Right control input
+    uint8_t speed;              // Speed multiplier (0-100%)
+    float aux[AUX_CHANNEL_COUNT];   // Auxiliary channels
+    bool toggles[TOGGLE_COUNT];     // Toggle switches
+} control_command_t;
+
+// =============================================================================
+// DEFAULT VALUES
+// =============================================================================
+
+/**
+ * @brief Initialize command to safe defaults (all zeros)
+ */
+static inline void command_init(control_command_t* cmd) {
+    memset(cmd, 0, sizeof(control_command_t));
+    strcpy(cmd->type, "none");
+    strcpy(cmd->vehicle, "mecanum");
+}
+
+#endif // COMMAND_PACKET_H
