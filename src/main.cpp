@@ -57,6 +57,7 @@
 #include "drivers/mcp23017.h"
 
 // Profiles
+#include "profiles/profile_Group17.h"
 #include "profiles/profile_mecanum.h"
 #if defined(ENABLE_MOTOR_5) || defined(ENABLE_DC_MOTOR_3) || defined(ENABLE_DC_MOTOR_4)
 #include "profiles/profile_aux_motors.h"
@@ -196,12 +197,18 @@ void onBleCommand(const char *jsonData, uint16_t length) {
     return;
   }
 
+  #ifdef MOTION_PROFILE_GROUP17
+     profile_group17_apply(&cmd); 
+  #endif
+
   // Route to the main drive motion profile
+  if (!profile_group17_is_active()) {
   if (strcmp(cmd.vehicle, "mecanum") == 0) {
 #ifdef MOTION_PROFILE_MECANUM
     profile_mecanum_apply(&cmd);
 #endif
   }
+}
 
   // Route to auxiliary motors (Motor 5, DC Motors 3-4)
 #if defined(ENABLE_MOTOR_5) || defined(ENABLE_DC_MOTOR_3) || defined(ENABLE_DC_MOTOR_4)
@@ -288,6 +295,17 @@ void setup() {
   // =========================================================================
   Serial.println("[Core0] Initializing motors...");
   bool motorsOk = motors_init();
+
+  Serial.println();
+  Serial.println();
+  for (uint8_t addr = 0x08; addr < 0x78; addr++) {
+    uint8_t data;
+    if (i2c_read_blocking(i2c0, addr, &data, 1, false) >= 0) {
+        Serial.printf("I2C device found at 0x%02X\n", addr);
+    }
+}
+Serial.println();
+Serial.println();
   if (!motorsOk) {
     Serial.println("ERROR: Motor initialization failed!");
     Serial.println("       MCP23017 not responding - check I2C wiring");

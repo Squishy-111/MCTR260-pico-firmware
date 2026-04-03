@@ -79,7 +79,7 @@
 // MOTION PROFILES (Enable one or more)
 // =============================================================================
 
-#define MOTION_PROFILE_MECANUM // 4-wheel omnidirectional drive
+ #define MOTION_PROFILE_MECANUM // 4-wheel omnidirectional drive
 // #define MOTION_PROFILE_DIRECT    // Raw motor control via aux channels
 
 // =============================================================================
@@ -87,13 +87,13 @@
 // =============================================================================
 
 // Wheel radius in millimeters
-#define WHEEL_RADIUS_MM 50.0f
+#define WHEEL_RADIUS_MM 38.1f
 
 // Distance from center to front/back axle (half of wheelbase)
-#define WHEELBASE_HALF_MM 100.0f
+#define WHEELBASE_HALF_MM 65f
 
 // Distance from center to left/right wheel (half of track width)
-#define TRACK_WIDTH_HALF_MM 100.0f
+#define TRACK_WIDTH_HALF_MM 140f
 
 // NOTE: Joystick deadzone is handled by the Flutter app at input level
 
@@ -200,7 +200,7 @@
 #define STEPPER_MAX_SPEED 4000.0f
 
 // Acceleration (steps per second squared)
-#define STEPPER_ACCELERATION 8000.0f
+#define STEPPER_ACCELERATION 10000.0f
 
 // Stepper pulse generation interval (microseconds)
 // Lower = faster response, but more CPU usage
@@ -217,7 +217,7 @@
 #define MOTOR_UPDATE_INTERVAL_MS 20
 
 // Safety timeout - stop motors if no command received
-#define SAFETY_TIMEOUT_MS 2000
+#define SAFETY_TIMEOUT_MS 5000
 
 // Telemetry update rate
 #define TELEMETRY_INTERVAL_MS 500
@@ -229,10 +229,10 @@
 // It runs at the same 500µs update rate as M1-M4 but writes to Port A
 // instead of Port B. Control it from the Flutter app's aux sliders.
 
-// #define ENABLE_MOTOR_5                // Uncomment to enable Motor 5
-// #define MOTOR_5_AUX_CHANNEL      0    // Which aux slider controls M5 (0-5)
-// #define MOTOR_5_MAX_SPEED     2000.0f // Max speed in steps/sec
-// #define MOTOR_5_DIR_INVERT       1    // 1 = normal, -1 = reverse
+ #define ENABLE_MOTOR_5                // Uncomment to enable Motor 5
+ #define MOTOR_5_AUX_CHANNEL      2   // Which aux slider controls M5 (0-5)
+ #define MOTOR_5_MAX_SPEED     2000.0f // Max speed in steps/sec
+ #define MOTOR_5_DIR_INVERT       1    // 1 = normal, -1 = reverse
 
 // =============================================================================
 // AUXILIARY DC MOTORS (On/off direction via MCP23017 U6_2 Port A)
@@ -249,5 +249,11 @@
 // #define ENABLE_DC_MOTOR_4              // Uncomment to enable DC Motor 4
 // #define DC_MOTOR_4_AUX_CHANNEL    2    // Which aux slider controls it (0-5)
 // #define DC_MOTOR_4_DIR_INVERT     1    // 1 = normal, -1 = reverse
+
+// =============================================================================
+// mission protocol profile
+// =============================================================================
+
+#define MOTION_PROFILE_GROUP17
 
 #endif // PROJECT_CONFIG_H
